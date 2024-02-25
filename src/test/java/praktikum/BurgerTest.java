@@ -5,10 +5,16 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.Mockito.when;
 import static praktikum.IngredientType.FILLING;
+import static praktikum.IngredientType.SAUCE;
 
 @RunWith(MockitoJUnitRunner.class)
 
@@ -21,8 +27,6 @@ public class BurgerTest {
     @Mock
     Ingredient ingredient;
 
-    @Mock
-    private Burger ingredients;
 
 
     @Test
@@ -41,7 +45,7 @@ public class BurgerTest {
     }
 
     @Test
-    public void getReceipt() {
+    public void getReceiptTest() {
 
         Mockito.when(bun.getName()).thenReturn("black bun");
         when(bun.getPrice()).thenReturn(988.0f);
@@ -52,8 +56,9 @@ public class BurgerTest {
         Burger burger = new Burger();
         burger.setBuns(bun);
         burger.addIngredient(ingredient);
+        String expectedReciept = "(==== black bun ====)\n= filling cutlet =\n(==== black bun ====)\n\nPrice: 3313.000000\n";
 
-        MatcherAssert.assertThat(("(==== black bun ====)\n= filling cutlet =\n(==== black bun ====)\n\nPrice: 3313.000000\n"), equalTo(burger.getReceipt()));
+        assertEquals(expectedReciept, burger.getReceipt());
     }
 
     @Test
@@ -75,13 +80,12 @@ public class BurgerTest {
 
     @Test
     public void moveIngredientTest() {
-        burger.addIngredient(new Ingredient(IngredientType.FILLING, "dinosaur", 200));
-        burger.addIngredient(new Ingredient(IngredientType.SAUCE, "chili sauce", 300));
-        burger.addIngredient(new Ingredient(FILLING, "sausage", 300));
-        burger.moveIngredient(0, 2);
-        String actualValue = burger.ingredients.get(0).name;
-        String expectedValue = "sausage";
-        assertEquals( expectedValue, actualValue);
+        burger.addIngredient(new Ingredient(FILLING, "dinosaur", 200));
+        burger.addIngredient(new Ingredient(SAUCE, "chili sauce", 300));
+        Ingredient expectedValue = burger.ingredients.get(1);
+        burger.moveIngredient(0, 1);
+        Ingredient actualValue = burger.ingredients.get(0);
+        assertEquals(expectedValue, actualValue);
     }
 
     @Test
